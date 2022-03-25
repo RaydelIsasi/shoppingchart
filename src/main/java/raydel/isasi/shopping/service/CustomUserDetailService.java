@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import raydel.isasi.shopping.pojo.User;
-import raydel.isasi.shopping.repository.UsuarioRepository;
+import raydel.isasi.shopping.repository.UserRepository;
 
 import java.util.ArrayList;
 
@@ -18,7 +18,7 @@ public class CustomUserDetailService implements UserDetailsService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomUserDetailService.class);
 
     @Autowired
-    private UsuarioRepository usuarioR;
+    private UserRepository userRepository;
 
 
     @Override
@@ -26,7 +26,7 @@ public class CustomUserDetailService implements UserDetailsService {
         LOGGER.info("Fetching user from database for authentication");
 
 
-        User dbuser = usuarioR.findByName(username);
+        User dbuser = userRepository.findByName(username);
         if (dbuser != null && dbuser.getIsactive()) {
             org.springframework.security.core.userdetails.User user = new org.springframework.security.core.userdetails.User(dbuser.getName(), dbuser.getPassword(), new ArrayList<>());
 

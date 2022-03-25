@@ -2,16 +2,18 @@ package raydel.isasi.shopping.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import raydel.isasi.shopping.pojo.FlyingTicket;
 import raydel.isasi.shopping.pojo.Itinerary;
 import raydel.isasi.shopping.pojo.Passenger;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
-public class FlyingTicketService {
+public class UtilStorageService {
 
     @Autowired
     JWTService jwtService;
@@ -19,7 +21,8 @@ public class FlyingTicketService {
     @Autowired
     CustomUserDetailService customUserDetailService;
 
-    public String savePassenger(Passenger passenger, String token) throws IOException, ServletException {
+    /* this method saves the passenger data into the JWT */
+    public String savePassengerData(Passenger passenger, String token) throws IOException, ServletException {
 
         Map<String, Object> flyingTicket = jwtService.extractFlyingTicket(token);
         Map<String, Object> claims = (jwtService.extractAllClaims(token));
@@ -59,7 +62,8 @@ public class FlyingTicketService {
         return updated_token;
     }
 
-    public String saveItinerary(Itinerary itinerary, String token) throws IOException, ServletException {
+    /* this method saves the itinerary data into the JWT */
+    public String saveItineraryData(Itinerary itinerary, String token) throws IOException, ServletException {
 
         Map<String, Object> flyingTicket = jwtService.extractFlyingTicket(token);
         Map<String, Object> claims = (jwtService.extractAllClaims(token));

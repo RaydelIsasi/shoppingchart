@@ -1,7 +1,6 @@
 package raydel.isasi.shopping.service;
 
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +8,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import raydel.isasi.shopping.exception.CustomException;
 import raydel.isasi.shopping.pojo.User;
-import raydel.isasi.shopping.repository.IUsuario;
-import raydel.isasi.shopping.repository.UsuarioRepository;
+import raydel.isasi.shopping.repository.IUser;
+import raydel.isasi.shopping.repository.UserRepository;
 
 import javax.validation.ConstraintViolationException;
 import java.util.List;
@@ -18,18 +17,18 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UsuarioServiceImpl implements IUsuario {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UsuarioServiceImpl.class);
+public class UserServiceImpl implements IUser {
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
     @Autowired
-    private UsuarioRepository usuarioR;
+    private UserRepository userRepository;
 
     @Override
-    public User insertarUsuario(User u) throws Exception {
+    public User saveUser(User u) throws Exception {
 
-          LOGGER.info("Saving User into database");
-        if (usuarioR.findByEmail(u.getEmail()).isEmpty()) {
+        LOGGER.info("Saving User into database");
+        if (userRepository.findByEmail(u.getEmail()).isEmpty()) {
             try {
-                return usuarioR.save(u);
+                return userRepository.save(u);
 
 
             } catch (ConstraintViolationException e) {
@@ -44,31 +43,31 @@ public class UsuarioServiceImpl implements IUsuario {
     }
 
     @Override
-    public User actualizarUsuario(User u) throws Exception {
+    public User updateUser(User u) throws Exception {
 
         LOGGER.info("Updating  User");
         try {
-            return usuarioR.save(u);
+            return userRepository.save(u);
 
         } catch (DataIntegrityViolationException e) {
-            throw new Exception("Usuario ya existe");
+            throw new Exception("User already registered");
         }
 
 
     }
 
     @Override
-    public String eliminarUsuario(UUID idusuario) {
+    public String deleteUser(UUID idusuario) {
 
         String r = "";
 
         try {
-            usuarioR.deleteById(idusuario);
+            userRepository.deleteById(idusuario);
 
 
         } catch (Exception e) {
 
-            r = "Falla al eliminar el usuario";
+            r = "There was an error trying to delete the user";
         }
 
 
@@ -77,17 +76,17 @@ public class UsuarioServiceImpl implements IUsuario {
     }
 
     @Override
-    public Optional<User> buscarUsuario(UUID idusuario) {
+    public Optional<User> findUser(UUID idusuario) {
 
-        Optional<User> u = usuarioR.findById(idusuario);
+        Optional<User> u = userRepository.findById(idusuario);
 
         return u;
     }
 
 
     @Override
-    public List<User> listarUsuarios() {
-        List<User> usuarios = (List<User>) usuarioR.findAll();
+    public List<User> findAllUsers() {
+        List<User> usuarios = (List<User>) userRepository.findAll();
         return usuarios;
     }
 
