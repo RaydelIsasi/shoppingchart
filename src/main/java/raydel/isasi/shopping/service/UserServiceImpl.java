@@ -32,11 +32,11 @@ public class UserServiceImpl implements IUser {
 
 
             } catch (ConstraintViolationException e) {
-                throw new CustomException("Error al insertar el usuario");
+                throw new CustomException("There was an error storing user into the db");
             }
 
         } else {
-            throw new CustomException("El correo ya registrado");
+            throw new CustomException("The email is already registered");
         }
 
 

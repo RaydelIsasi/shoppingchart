@@ -4,19 +4,22 @@ package raydel.isasi.shopping.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import raydel.isasi.shopping.pojo.FlyingTicket;
 import raydel.isasi.shopping.pojo.Itinerary;
 import raydel.isasi.shopping.pojo.Passenger;
-import raydel.isasi.shopping.pojo.SuccessPersistenceResponse;
 import raydel.isasi.shopping.service.FlyingServiceImpl;
 import raydel.isasi.shopping.service.JWTService;
 import raydel.isasi.shopping.service.UtilStorageService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 
 @RestController
@@ -33,8 +36,7 @@ public class TicketRegistryController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TicketRegistryController.class);
 
-    private static final String AUTHORIZATION = "Authorization";
-    private static final String TOKEN_BEARER_PREFIX = "Bearer ";
+
 
     @RequestMapping(value = "/registerPassenger", method = RequestMethod.POST, produces = {
             "application/json"}, consumes = {"application/json"})
@@ -42,12 +44,16 @@ public class TicketRegistryController {
     public ResponseEntity<Object> addPassenger(@RequestBody Passenger passenger, HttpServletRequest request) throws Exception {
 
         LOGGER.info("Initiating Passenger persistence");
-        final String token = request.getHeader(AUTHORIZATION).substring(7);
-        final String updated_token = utilStorageService.savePassengerData(passenger, token);
-        final Map<String, Object> flyingTicket = jwtService.extractFlyingTicket(updated_token);
-        SuccessPersistenceResponse successResponse = new SuccessPersistenceResponse(flyingTicket, updated_token);
+
+        final String updated_token = utilStorageService.savePassengerData(passenger, request);
+
+        List<String> values = new ArrayList<>();
+        values.add(updated_token);
+        HttpHeaders headers = new HttpHeaders();
+        headers.put("token", values);
+
         LOGGER.info("Finishing Passenger persistence");
-        return new ResponseEntity<Object>(successResponse, HttpStatus.OK);
+        return new ResponseEntity<Object>(jwtService.extractFlyingTicket(updated_token), headers, HttpStatus.OK);
 
     }
 
@@ -57,12 +63,13 @@ public class TicketRegistryController {
     @ResponseBody
     public ResponseEntity<Object> addItinerary(@RequestBody Itinerary itinerary, HttpServletRequest request) throws Exception {
         LOGGER.info("Initiating itinerary persistence");
-        final String token = request.getHeader(AUTHORIZATION).substring(7);
-        final String updated_token = utilStorageService.saveItineraryData(itinerary, token);
-        final Map<String, Object> flyingTicket = jwtService.extractFlyingTicket(updated_token);
-        SuccessPersistenceResponse successResponse = new SuccessPersistenceResponse(flyingTicket, updated_token);
+        final String updated_token = utilStorageService.saveItineraryData(itinerary, request);
+        List<String> values = new ArrayList<>();
+        values.add(updated_token);
+        HttpHeaders headers = new HttpHeaders();
+        headers.put("token", values);
         LOGGER.info("Finishing itinerary persistence");
-        return new ResponseEntity<Object>(successResponse, HttpStatus.OK);
+        return new ResponseEntity<Object>(jwtService.extractFlyingTicket(updated_token), headers, HttpStatus.OK);
 
     }
 
@@ -73,12 +80,10 @@ public class TicketRegistryController {
     public ResponseEntity<Object> confirmTicket(HttpServletRequest request) throws Exception {
         LOGGER.info("Initiating ticket confirmation persistence");
         final String token = request.getHeader(AUTHORIZATION).substring(7);
-
         final Map<String, Object> flyingTicket = jwtService.extractFlyingTicket(token);
-        FlyingTicket flyingTicketDB = flyingService.saveFlyingTicket(flyingTicket);
 
         LOGGER.info("Finishing ticket confirmation persistence");
-        return new ResponseEntity<Object>(flyingTicketDB, HttpStatus.OK);
+        return new ResponseEntity<Object>(flyingService.saveFlyingTicket(flyingTicket), HttpStatus.OK);
 
     }
 

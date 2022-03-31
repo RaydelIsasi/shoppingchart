@@ -2,8 +2,8 @@ package raydel.isasi.shopping.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
-
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.io.IOException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -49,6 +52,13 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
+    @ExceptionHandler (value = {AccessDeniedException.class})
+    ResponseEntity<Object> handleAccessDeniedException(HttpServletRequest request, HttpServletResponse response,
+                         AccessDeniedException accessDeniedException) throws IOException {
+
+        return new ResponseEntity<Object>(new com.user.registry.pojo.ErrorResponse(accessDeniedException.getMessage()), HttpStatus.UNAUTHORIZED);
+
+    }
     @ExceptionHandler(value
             = {TransactionSystemException.class})
     @ResponseBody

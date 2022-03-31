@@ -16,7 +16,6 @@ import raydel.isasi.shopping.repository.UserRepository;
 import raydel.isasi.shopping.service.CustomUserDetailService;
 import raydel.isasi.shopping.service.JWTService;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
@@ -48,11 +47,7 @@ public class LoginController {
         usuario.setModified(new Date());
         usuario.setCreated(new Date());
         usuario.setIsactive(true);
-        final String token = jwtService.generateToken(new org.springframework.security.core.userdetails.User(usuario.getName(), usuario.getPassword(), new ArrayList<>()), new LinkedHashMap<>());
-        usuario.setToken(token);
         userRepository.save(usuario);
-
-
         return new ResponseEntity<Object>(usuario, HttpStatus.OK);
 
     }

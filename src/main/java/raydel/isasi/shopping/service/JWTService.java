@@ -13,9 +13,11 @@ import raydel.isasi.shopping.pojo.FlyingTicket;
 import javax.servlet.ServletException;
 import java.io.IOException;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
+
+import static raydel.isasi.shopping.util.Constant.ISSUER_INFO;
+import static raydel.isasi.shopping.util.Constant.SECRET_KEY;
 
 @Service
 public class JWTService {
@@ -23,8 +25,7 @@ public class JWTService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JWTService.class);
 
-    public static final String ISSUER_INFO = "https://shooppingchart/";
-    public static final String SECRET_KEY = "secret_key";
+
     public static final long TOKEN_EXPIRATION_TIME = 864_000_000;
 
     public String generateToken(UserDetails userDetails, Map<String, Object> claims) throws IOException, ServletException {

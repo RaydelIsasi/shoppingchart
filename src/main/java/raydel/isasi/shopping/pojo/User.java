@@ -3,13 +3,12 @@ package raydel.isasi.shopping.pojo;
 
 
 
-import javax.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
 import javax.validation.constraints.Pattern;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @Table(name = "User")
@@ -53,8 +52,6 @@ public class User {
     @Column(name = "last_login")
     private Date last_login;
 
-    @Column(name = "token")
-    private String token;
     @Column(name = "isactive")
     private Boolean isactive;
 
@@ -109,13 +106,7 @@ public class User {
         this.last_login = last_login;
     }
 
-    public String getToken() {
-        return token;
-    }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
 
     public Boolean getIsactive() {
         return isactive;

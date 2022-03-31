@@ -14,6 +14,8 @@ import raydel.isasi.shopping.repository.IFlyingTicket;
 import java.util.List;
 import java.util.Map;
 
+import static raydel.isasi.shopping.util.Constant.*;
+
 @Service
 public class FlyingServiceImpl implements IFlyingTicket {
     private static final Logger LOGGER = LoggerFactory.getLogger(FlyingServiceImpl.class);
@@ -26,26 +28,19 @@ public class FlyingServiceImpl implements IFlyingTicket {
         FlyingTicket ticket = new FlyingTicket();
         if (flyingTicket != null) {
 
-            if (flyingTicket.get("passengerList") != null) {
-                List<Passenger> passengerList = (List<Passenger>) flyingTicket.get("passengerList");
+            if (flyingTicket.get(PASSENGER) != null) {
+                List<Passenger> passengerList = (List<Passenger>) flyingTicket.get(PASSENGER);
 
-            /*    List<Passenger> updatedPassengerList = passengerList.stream().map(p -> {
-
-                    p.setFlyingTicket(ticket);
-                    return p;
-                }).collect(Collectors.toList());*/
-
-
-                ticket.setPassengerList( passengerList);
+                ticket.setPassengerList(passengerList);
             }
 
-            if (flyingTicket.get("itinerary") != null) {
+            if (flyingTicket.get(ITINERARY) != null) {
 
-                Map<String, Object> itineraryMap = (Map<String, Object>) flyingTicket.get("itinerary");
+                Map<String, Object> itineraryMap = (Map<String, Object>) flyingTicket.get(ITINERARY);
                 Itinerary itinerary = new Itinerary();
-                itinerary.setDestiny(String.valueOf(itineraryMap.get("destiny")));
-          //      itinerary.setFlyingTicket(ticket);
-                itinerary.setOrigin(String.valueOf(itineraryMap.get("origin")));
+                itinerary.setDestiny(String.valueOf(itineraryMap.get(DESTINY)));
+
+                itinerary.setOrigin(String.valueOf(itineraryMap.get(ORIGIN)));
                 itinerary.setFlyingNumber(String.valueOf(itineraryMap.get("flyingNumber")));
 
 
@@ -62,13 +57,13 @@ public class FlyingServiceImpl implements IFlyingTicket {
         FlyingTicket ticket = new FlyingTicket();
         if (flyingTicket != null) {
 
-            if (flyingTicket.get("passengerList") != null) {
-                List<Passenger> passengerList = (List<Passenger>) flyingTicket.get("passengerList");
+            if (flyingTicket.get(PASSENGER) != null) {
+                List<Passenger> passengerList = (List<Passenger>) flyingTicket.get(PASSENGER);
                 ticket.setPassengerList(passengerList);
             }
 
-            if (flyingTicket.get("itinerary") != null) {
-                Itinerary itinerary = (Itinerary) flyingTicket.get("itinerary");
+            if (flyingTicket.get(ITINERARY) != null) {
+                Itinerary itinerary = (Itinerary) flyingTicket.get(ITINERARY);
                 ticket.setItinerary(itinerary);
             }
 
