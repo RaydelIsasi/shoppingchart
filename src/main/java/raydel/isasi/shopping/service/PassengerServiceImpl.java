@@ -2,7 +2,6 @@ package raydel.isasi.shopping.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import raydel.isasi.shopping.pojo.Itinerary;
 import raydel.isasi.shopping.pojo.Passenger;
 
 import javax.servlet.ServletException;
@@ -14,10 +13,11 @@ import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static raydel.isasi.shopping.util.Constant.*;
+import static raydel.isasi.shopping.util.Constant.PASSENGER;
+import static raydel.isasi.shopping.util.Constant.TICKET;
 
 @Service
-public class UtilStorageService {
+public class PassengerServiceImpl implements IPassengerService {
 
     @Autowired
     JWTService jwtService;
@@ -26,11 +26,10 @@ public class UtilStorageService {
     CustomUserDetailService customUserDetailService;
 
 
-
-    /* this method saves the passenger data into the JWT */
-    public String savePassengerData(Passenger passenger, HttpServletRequest request) throws IOException, ServletException {
-
-        String token = request.getHeader(AUTHORIZATION).substring(7);
+    @Override
+    public String savePassengerData(Passenger passenger, Object request) throws IOException, ServletException {
+        HttpServletRequest httpReq = (HttpServletRequest) request;
+        String token = httpReq.getHeader(AUTHORIZATION).substring(7);
         Map<String, Object> flyingTicket = jwtService.extractFlyingTicket(token);
         Map<String, Object> claims = (jwtService.extractAllClaims(token));
 
@@ -63,35 +62,8 @@ public class UtilStorageService {
 
 
         }
-
         final String updated_token = jwtService.generateToken(customUserDetailService.loadUserByUsername(jwtService.extractUser(token)), claims);
 
         return updated_token;
     }
-
-    /* this method saves the itinerary data into the JWT */
-    public String saveItineraryData(Itinerary itinerary, HttpServletRequest request) throws IOException, ServletException {
-        String token = request.getHeader(AUTHORIZATION).substring(7);
-        Map<String, Object> flyingTicket = jwtService.extractFlyingTicket(token);
-        Map<String, Object> claims = (jwtService.extractAllClaims(token));
-
-
-        if (flyingTicket == null) {
-            flyingTicket = new HashMap<>();
-
-
-        }
-
-
-        flyingTicket.put(ITINERARY, itinerary);
-
-
-        claims.put(TICKET, flyingTicket);
-
-
-        final String updated_token = jwtService.generateToken(customUserDetailService.loadUserByUsername(jwtService.extractUser(token)), claims);
-        return updated_token;
-    }
-
-
 }

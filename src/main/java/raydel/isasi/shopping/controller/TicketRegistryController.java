@@ -10,9 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import raydel.isasi.shopping.pojo.Itinerary;
 import raydel.isasi.shopping.pojo.Passenger;
-import raydel.isasi.shopping.service.FlyingServiceImpl;
+import raydel.isasi.shopping.repository.IFlyingTicket;
+import raydel.isasi.shopping.service.IItineraryService;
+import raydel.isasi.shopping.service.IPassengerService;
 import raydel.isasi.shopping.service.JWTService;
-import raydel.isasi.shopping.service.UtilStorageService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -28,14 +29,17 @@ public class TicketRegistryController {
 
     @Autowired
     JWTService jwtService;
-    @Autowired
-    UtilStorageService utilStorageService;
 
     @Autowired
-    FlyingServiceImpl flyingService;
+    IItineraryService itineraryService;
+
+    @Autowired
+    IPassengerService passengerService;
+
+    @Autowired
+    IFlyingTicket flyingService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TicketRegistryController.class);
-
 
 
     @RequestMapping(value = "/registerPassenger", method = RequestMethod.POST, produces = {
@@ -45,7 +49,7 @@ public class TicketRegistryController {
 
         LOGGER.info("Initiating Passenger persistence");
 
-        final String updated_token = utilStorageService.savePassengerData(passenger, request);
+        final String updated_token = passengerService.savePassengerData(passenger, request);
 
         List<String> values = new ArrayList<>();
         values.add(updated_token);
@@ -63,7 +67,7 @@ public class TicketRegistryController {
     @ResponseBody
     public ResponseEntity<Object> addItinerary(@RequestBody Itinerary itinerary, HttpServletRequest request) throws Exception {
         LOGGER.info("Initiating itinerary persistence");
-        final String updated_token = utilStorageService.saveItineraryData(itinerary, request);
+        final String updated_token = itineraryService.saveItineraryData(itinerary, request);
         List<String> values = new ArrayList<>();
         values.add(updated_token);
         HttpHeaders headers = new HttpHeaders();

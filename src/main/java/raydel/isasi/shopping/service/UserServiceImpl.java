@@ -12,6 +12,7 @@ import raydel.isasi.shopping.repository.IUser;
 import raydel.isasi.shopping.repository.UserRepository;
 
 import javax.validation.ConstraintViolationException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,6 +29,11 @@ public class UserServiceImpl implements IUser {
         LOGGER.info("Saving User into database");
         if (userRepository.findByEmail(u.getEmail()).isEmpty()) {
             try {
+
+                u.setLast_login(new Date());
+                u.setModified(new Date());
+                u.setCreated(new Date());
+                u.setIsactive(true);
                 return userRepository.save(u);
 
 

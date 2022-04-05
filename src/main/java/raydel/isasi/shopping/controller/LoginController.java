@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import raydel.isasi.shopping.pojo.AuthenticationRequest;
 import raydel.isasi.shopping.pojo.AuthenticationResponse;
 import raydel.isasi.shopping.pojo.User;
-import raydel.isasi.shopping.repository.UserRepository;
+import raydel.isasi.shopping.repository.IUser;
 import raydel.isasi.shopping.service.CustomUserDetailService;
 import raydel.isasi.shopping.service.JWTService;
 
-import java.util.Date;
 import java.util.LinkedHashMap;
 
 
@@ -28,27 +27,22 @@ public class LoginController {
     AuthenticationManager authenticationManager;
 
     @Autowired
-    private UserRepository userRepository;
+    private IUser userService;
 
     @Autowired
-    JWTService jwtService;
+    private JWTService jwtService;
 
     @Autowired
-    CustomUserDetailService customUserDetailService;
+    private CustomUserDetailService customUserDetailService;
 
 
     @RequestMapping(value = "/registerUser", method = RequestMethod.POST, produces = {
             "application/json"}, consumes = {"application/json"})
     @ResponseBody
     public ResponseEntity<Object> registerUser(@RequestBody User usuario) throws Exception {
-        LOGGER.info("Initiating User persistence");
-        org.springframework.security.core.userdetails.User user = null;
-        usuario.setLast_login(new Date());
-        usuario.setModified(new Date());
-        usuario.setCreated(new Date());
-        usuario.setIsactive(true);
-        userRepository.save(usuario);
-        return new ResponseEntity<Object>(usuario, HttpStatus.OK);
+
+
+        return new ResponseEntity<Object>(userService.saveUser(usuario), HttpStatus.OK);
 
     }
 
@@ -62,9 +56,7 @@ public class LoginController {
 
         final String token = jwtService.generateToken(customUserDetailService.loadUserByUsername(request.getUsername()), new LinkedHashMap<>());
 
-
-        AuthenticationResponse authenticationResponse = new AuthenticationResponse(token);
-        return new ResponseEntity<Object>(authenticationResponse, HttpStatus.OK);
+        return new ResponseEntity<Object>( new AuthenticationResponse(token), HttpStatus.OK);
 
     }
 
