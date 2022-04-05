@@ -1,4 +1,4 @@
-package raydel.isasi.shopping.service;
+package raydel.isasi.shopping.service.impl;
 
 
 import org.slf4j.Logger;

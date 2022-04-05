@@ -13,7 +13,8 @@ import raydel.isasi.shopping.pojo.Passenger;
 import raydel.isasi.shopping.repository.IFlyingTicket;
 import raydel.isasi.shopping.service.IItineraryService;
 import raydel.isasi.shopping.service.IPassengerService;
-import raydel.isasi.shopping.service.JWTService;
+import raydel.isasi.shopping.service.ITokenInfoService;
+
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 public class TicketRegistryController {
 
     @Autowired
-    JWTService jwtService;
+    ITokenInfoService tokenInfoService;
 
     @Autowired
     IItineraryService itineraryService;
@@ -57,7 +58,7 @@ public class TicketRegistryController {
         headers.put("token", values);
 
         LOGGER.info("Finishing Passenger persistence");
-        return new ResponseEntity<Object>(jwtService.extractFlyingTicket(updated_token), headers, HttpStatus.OK);
+        return new ResponseEntity<Object>(tokenInfoService.extractFlyingTicketInfo(updated_token), headers, HttpStatus.OK);
 
     }
 
@@ -73,7 +74,7 @@ public class TicketRegistryController {
         HttpHeaders headers = new HttpHeaders();
         headers.put("token", values);
         LOGGER.info("Finishing itinerary persistence");
-        return new ResponseEntity<Object>(jwtService.extractFlyingTicket(updated_token), headers, HttpStatus.OK);
+        return new ResponseEntity<Object>(tokenInfoService.extractFlyingTicketInfo(updated_token), headers, HttpStatus.OK);
 
     }
 
@@ -84,7 +85,7 @@ public class TicketRegistryController {
     public ResponseEntity<Object> confirmTicket(HttpServletRequest request) throws Exception {
         LOGGER.info("Initiating ticket confirmation persistence");
         final String token = request.getHeader(AUTHORIZATION).substring(7);
-        final Map<String, Object> flyingTicket = jwtService.extractFlyingTicket(token);
+        final Map<String, Object> flyingTicket = tokenInfoService.extractFlyingTicketInfo(token);
 
         LOGGER.info("Finishing ticket confirmation persistence");
         return new ResponseEntity<Object>(flyingService.saveFlyingTicket(flyingTicket), HttpStatus.OK);

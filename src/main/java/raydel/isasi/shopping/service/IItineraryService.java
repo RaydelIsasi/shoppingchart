@@ -7,5 +7,5 @@ import java.io.IOException;
 
 public interface IItineraryService {
 
-    public String saveItineraryData(Itinerary itinerary, Object request) throws IOException, ServletException;
+    public String saveItineraryData(Itinerary itinerary, Object request) throws IOException, ServletException, Exception;
 }

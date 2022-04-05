@@ -1,4 +1,4 @@
-package raydel.isasi.shopping.service;
+package raydel.isasi.shopping.service.impl;
 
 
 import io.jsonwebtoken.Claims;
@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import raydel.isasi.shopping.pojo.FlyingTicket;
+import raydel.isasi.shopping.service.IJWTService;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
@@ -20,53 +21,29 @@ import static raydel.isasi.shopping.util.Constant.ISSUER_INFO;
 import static raydel.isasi.shopping.util.Constant.SECRET_KEY;
 
 @Service
-public class JWTService {
+public class JWTServiceImpl implements IJWTService {
 
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JWTService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JWTServiceImpl.class);
 
 
     public static final long TOKEN_EXPIRATION_TIME = 864_000_000;
 
     public String generateToken(UserDetails userDetails, Map<String, Object> claims) throws IOException, ServletException {
         LOGGER.info("Initiating generation of Bearer Token");
-
         return createToken(claims, userDetails.getUsername());
-
-
     }
 
-    public Date extractExpiration(String token) {
-
-        return extractClaim(token, Claims::getExpiration);
+    private <T> T extractClaim(String token, Function<Claims, T> claimsresolver) {
 
 
-    }
-
-
-    public Map<String, Object> extractFlyingTicket(String token) {
-
-        return (Map<String, Object>) extractAllClaims(token).get("FLYING_TICKET");
-
-
-    }
-
-    public String extractUser(String token) {
-        LOGGER.info("Extracting user from  Token");
-        return extractClaim(token, Claims::getSubject);
-
-
-    }
-
-    public <T> T extractClaim(String token, Function<Claims, T> claimsresolver) {
-
-        final Claims claims = extractAllClaims(token);
+        final Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
         return claimsresolver.apply(claims);
     }
 
-    public Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
-    }
+
+
+
 
     private String createToken(Map<String, Object> claims, String username) throws IOException, ServletException {
 
@@ -86,13 +63,13 @@ public class JWTService {
 
     private Boolean isTokenExpired(String token) {
 
-        return extractExpiration(token).before(new Date());
+        return extractClaim(token, Claims::getExpiration).before(new Date());
 
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public boolean validateToken(String token, UserDetails userDetails) {
         LOGGER.info("Validating token");
-        String username = extractUser(token);
+        String username = extractClaim(token, Claims::getSubject);
         return username.equalsIgnoreCase(userDetails.getUsername()) && !isTokenExpired(token);
 
 

@@ -16,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import raydel.isasi.shopping.security.JWTFilter;
-import raydel.isasi.shopping.service.CustomUserDetailService;
+import raydel.isasi.shopping.service.impl.CustomUserDetailService;
 
 @Configuration
 @EnableWebSecurity

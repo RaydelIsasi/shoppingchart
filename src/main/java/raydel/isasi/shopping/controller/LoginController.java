@@ -13,8 +13,8 @@ import raydel.isasi.shopping.pojo.AuthenticationRequest;
 import raydel.isasi.shopping.pojo.AuthenticationResponse;
 import raydel.isasi.shopping.pojo.User;
 import raydel.isasi.shopping.repository.IUser;
-import raydel.isasi.shopping.service.CustomUserDetailService;
-import raydel.isasi.shopping.service.JWTService;
+import raydel.isasi.shopping.service.impl.CustomUserDetailService;
+import raydel.isasi.shopping.service.IJWTService;
 
 import java.util.LinkedHashMap;
 
@@ -30,7 +30,7 @@ public class LoginController {
     private IUser userService;
 
     @Autowired
-    private JWTService jwtService;
+    private IJWTService jwtService;
 
     @Autowired
     private CustomUserDetailService customUserDetailService;
