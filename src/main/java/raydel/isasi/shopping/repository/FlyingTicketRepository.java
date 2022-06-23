@@ -1,15 +1,14 @@
 package raydel.isasi.shopping.repository;
 
 
-
-
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import raydel.isasi.shopping.pojo.FlyingTicket;
 
-import java.util.UUID;
+import java.math.BigInteger;
 
 
-public interface FlyingTicketRepository extends CrudRepository<FlyingTicket, UUID> {
+public interface FlyingTicketRepository extends MongoRepository<FlyingTicket,
+        BigInteger> {
 
 
 

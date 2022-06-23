@@ -1,16 +1,14 @@
 package raydel.isasi.shopping.repository;
 
 
-
-
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import raydel.isasi.shopping.pojo.User;
 
+import java.math.BigInteger;
 import java.util.List;
-import java.util.UUID;
 
 
-public interface UserRepository extends CrudRepository<User, UUID> {
+public interface UserRepository extends MongoRepository<User, BigInteger> {
 
     public List<User> findByEmail(String email);
     public User findByName(String name);

@@ -3,9 +3,9 @@ package raydel.isasi.shopping.repository;
 
 import raydel.isasi.shopping.pojo.User;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface IUser {
 
@@ -13,9 +13,9 @@ public interface IUser {
 
     User updateUser(User u) throws Exception;
 
-    String deleteUser(UUID idusuario);
+    String deleteUser(BigInteger idusuario);
 
-    Optional<User> findUser(UUID idusuario);
+    Optional<User> findUser(BigInteger  idusuario);
 
 
     List<User> findAllUsers();

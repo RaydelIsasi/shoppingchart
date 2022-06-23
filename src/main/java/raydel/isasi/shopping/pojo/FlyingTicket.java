@@ -1,34 +1,25 @@
 package raydel.isasi.shopping.pojo;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
+import javax.persistence.Id;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-@Table(name = "FlyingTicket")
-@Entity
+@Document(collection = "FlyingTicket")
 public class FlyingTicket implements Serializable {
 
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", updatable = false, nullable = false)
-    @Type(type="uuid-char")
-    private UUID id;
+    private BigInteger id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "itineraty_id", referencedColumnName = "id")
+
     private Itinerary itinerary;
 
-     @OneToMany(mappedBy ="flyingTicket")
-      private List<Passenger> passengerList=new ArrayList<>();
+
+    private List<Passenger> passengerList = new ArrayList<>();
 
     public Itinerary getItinerary() {
         return itinerary;

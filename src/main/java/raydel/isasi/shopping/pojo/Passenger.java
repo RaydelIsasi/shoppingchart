@@ -1,41 +1,38 @@
 package raydel.isasi.shopping.pojo;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Table(name = "Passenger ")
-@Entity
+import javax.persistence.Id;
+import java.io.Serializable;
+import java.math.BigInteger;
+
+@Document
 public class Passenger implements Serializable {
 
     @Id
-    @Column(name = "ID")
-    private String ID;
+     private BigInteger id;
 
-    @Column(name = "name")
+
     private String name;
 
-    @Column(name = "lastName")
+
     private String lastName;
 
-    @Column(name = "passportNumber")
+
     private String passportNumber;
 
-    @Column(name = "seatNumber")
+
     private String seatNumber;
 
-    @OneToOne(mappedBy = "itinerary")
 
 
-    @ManyToOne
-    @JoinColumn(name = "flyingticket_id", nullable = false)
-    private FlyingTicket flyingTicket;
 
-    public String getID() {
-        return ID;
+    public BigInteger  getID() {
+        return id;
     }
 
-    public void setID(String ID) {
-        this.ID = ID;
+    public void setID(BigInteger  ID) {
+        this.id = id;
     }
 
     public String getName() {
@@ -46,13 +43,7 @@ public class Passenger implements Serializable {
         this.name = name;
     }
 
-    public FlyingTicket getFlyingTicket() {
-        return flyingTicket;
-    }
 
-    public void setFlyingTicket(FlyingTicket flyingTicket) {
-        this.flyingTicket = flyingTicket;
-    }
 
     public String getLastName() {
         return lastName;
@@ -86,7 +77,7 @@ public class Passenger implements Serializable {
         this.hasLuggagge = hasLuggagge;
     }
 
-    @Column(name = "hasLuggagge")
+
     private boolean hasLuggagge;
 
 

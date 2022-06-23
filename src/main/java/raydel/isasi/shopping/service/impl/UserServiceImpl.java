@@ -12,10 +12,10 @@ import raydel.isasi.shopping.repository.IUser;
 import raydel.isasi.shopping.repository.UserRepository;
 
 import javax.validation.ConstraintViolationException;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements IUser {
@@ -63,7 +63,7 @@ public class UserServiceImpl implements IUser {
     }
 
     @Override
-    public String deleteUser(UUID idusuario) {
+    public String deleteUser(BigInteger idusuario) {
 
         String r = "";
 
@@ -82,7 +82,7 @@ public class UserServiceImpl implements IUser {
     }
 
     @Override
-    public Optional<User> findUser(UUID idusuario) {
+    public Optional<User> findUser(BigInteger  idusuario) {
 
         Optional<User> u = userRepository.findById(idusuario);
 

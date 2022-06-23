@@ -1,61 +1,45 @@
 package raydel.isasi.shopping.pojo;
 
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-
-import javax.persistence.*;
 import javax.validation.constraints.Pattern;
+import java.math.BigInteger;
 import java.util.Date;
-import java.util.UUID;
 
-@Table(name = "User")
-@Entity
+@Document(collection = "users")
 public class User {
 
-    public UUID getId() {
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(BigInteger  id) {
         this.id = id;
     }
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", updatable = false, nullable = false)
-    @Type(type="uuid-char")
-    private UUID id;
+    private BigInteger  id;
 
-    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "email", nullable = false, unique = true)
-    @Pattern(regexp=".+@.+\\..+", message="Wrong email!")
     private String email;
 
-    @Column(name = "password", nullable = false, unique = true)
-    @Pattern(regexp="[A-Z][a-z]+[0-9]{2}",message="Wrong  password")
+
+    @Pattern(regexp = "[A-Z][a-z]+[0-9]{2}", message = "Wrong  password")
     private String password;
 
-    @Column(name = "created", nullable = false, unique = true)
     private Date created;
 
-    @Column(name = "modified", nullable = false, unique = true)
+
     private Date modified;
 
-    @Column(name = "last_login")
+
     private Date last_login;
 
-    @Column(name = "isactive")
+
     private Boolean isactive;
-
-
 
 
     public String getName() {
@@ -107,7 +91,6 @@ public class User {
     }
 
 
-
     public Boolean getIsactive() {
         return isactive;
     }
@@ -115,8 +98,6 @@ public class User {
     public void setIsactive(Boolean isactive) {
         this.isactive = isactive;
     }
-
-
 
 
 }
